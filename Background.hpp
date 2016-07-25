@@ -24,8 +24,7 @@ public:
 	void Paint();
 	void Repaint();
 private:
-	Title* title;
-	Game* game;
+	Panel* panel;
 	Configuration* config;
 	HDC front;
 	HDC back;

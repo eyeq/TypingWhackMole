@@ -75,12 +75,16 @@ DIFFICULTY Title::selectDifficulty()
 
 bool Title::Tick()
 {
-	if(IsKeyPushed(VK_RETURN) || IsMousePressed())
+	int x = GetMouseX();
+	int y = GetMouseY();
+	bool isMouseInSelect = 300 <= x && x < 400 && 300 <= y && y < 410;
+	if(IsKeyPushed(VK_RETURN) || (IsMousePressed() && isMouseInSelect))
 	{
 		PlaySoundBuffer(&returnSE);
 		(*config).SetDifficulty(selectDifficulty());
 		return true;
 	}
+
 	int preSelect = select;
 	if(IsKeyPushed(VK_UP))
 	{
@@ -96,7 +100,6 @@ bool Title::Tick()
 		else
 			++select;
 	}
-	int y = GetMouseY();
 	if(tempMouseY != y)
 	{
 		if(y < 340)

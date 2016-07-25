@@ -8,11 +8,11 @@
 
 class Panel
 {
-protected:
-	Panel(){}
-	~Panel(){}
 public:
-	void Init(){}
-	void Paint(HDC& hdc){ TextOut(hdc, 10, 10, L"panel", 5); }
-	bool Tick(){ return false; }
+	Panel(){}
+	virtual ~Panel(){}
+public:
+	virtual void Init(){}
+	virtual void Paint(HDC& hdc){ TextOut(hdc, 10, 10, L"panel", 5); }
+	virtual bool Tick(){ return false; }
 };

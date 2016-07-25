@@ -18,17 +18,14 @@ Background::Background(HWND& hWnd)
 	SetVolume(&titleBGM, 100);
 	SetVolume(&gameBGM, 100);
 
+	panel = NULL;
 	config = new Configuration();
-	game = new Game(config, &lpDS);
-	title = new Title(config, &lpDS);
 	SetBack(TITLE);
 }
 
 Background::~Background()
 {
 	SetBack(NONE);
-	delete title;
-	delete game;
 	delete config;
 
 	DeleteDC(front);
@@ -58,36 +55,37 @@ void Background::SetBack(MODE m)
 		break;
 	}
 	mode = m;
+	delete panel;
 	switch(mode)
 	{
 	case NONE:
-		break;
+		return;
 	case TITLE:
 		PlayLoopSoundBuffer(&titleBGM);
-		(*title).Init();
+		panel = new Title(config, &lpDS);
 		break;
 	case GAME:
 		PlayLoopSoundBuffer(&gameBGM);
-		(*game).Init();
+		panel = new Game(config, &lpDS);
 		break;
 	}
+	(*panel).Init();
 }
 
 void Background::Paint()
 {
 	Draw(back, gameBack, WIDTH, HEIGHT);
-	switch(mode)
-	{
-	case TITLE:
-		(*title).Paint(back);
-		if((*title).Tick())
+	(*panel).Paint(back);
+	if ((*panel).Tick()) {
+		switch (mode)
+		{
+		case TITLE:
 			SetBack(GAME);
-		break;
-	case GAME:
-		(*game).Paint(back);
-		if((*game).Tick())
+			break;
+		case GAME:
 			SetBack(TITLE);
-		break;
+			break;
+		}
 	}
 }
 
